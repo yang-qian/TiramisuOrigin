@@ -8,6 +8,7 @@ import datetime
 import random
 
 import math
+import distance
 
 # load a test csv
 raw_parsed = pd.read_csv('temp4.csv')
@@ -37,19 +38,6 @@ merged_1 = pd.merge(raw_parsed[:39571], stop_list_1, on='stop_id', how='left')
 merged_2 = pd.merge(raw_parsed[39571:], stop_list_2, on='stop_id', how='left')
 parse_wStop = pd.concat([merged_1, merged_2], axis=0, ignore_index=True)
 
-
-# calculate stop-current distance
-def getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2):
-    R = 6371 #Radius of the earth in km
-    dLat = deg2rad(lat2-lat1)
-    dLon = deg2rad(lon2-lon1)
-    a = math.sin(dLat/2) * math.sin(dLat/2) + math.cos(deg2rad(lat1)) * math.cos(deg2rad(lat2)) * math.sin(dLon/2) * math.sin(dLon/2)
-    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
-    d = R * c #Distance in km
-    return d
-
-def deg2rad(deg):
-    return deg * (math.pi/180)
 
 # calculate current_lat/lon to stop_lat/lon distances
 parse_wStop['distance'] = ''

@@ -8,6 +8,8 @@ import datetime
 import random
 
 import math
+import matplotlib
+import matplotlib.pyplot as plt
 
 import sample
 import parseTime as pt
@@ -31,24 +33,29 @@ full = pd.concat(templist, axis=0, ignore_index=True)
 
 full['date'] = pd.Series(index=full.index)
 full['tod'] = pd.Series(index=full.index)
+full['numToD'] = pd.Series(index=full.index)
 full['dow'] = pd.Series(index=full.index)
 parsedFull = []
 parsedDate = []
 parsedToD = []
+numToD = []
 parsedDoW = []
+
 for item in full['stamp'].loc[full['stamp'].notnull()]:
     item = pt.parseDate(item)
     parsedFull.append(item) #Datetime
     parsedDate.append(item.strftime('%Y-%m-%d')) #String
     parsedToD.append(item.strftime('%H:%M:%S')) #String
     parsedDoW.append(item.weekday())
+    numToD.append(item.hour + (item.minute/60) + (item.second/60/60))
 # Replace old problematic 'time' with full representation of time,
 # which is parsed from UNIX stamps.
 full['time'].loc[full['stamp'].notnull()] = parsedFull
 full['date'].loc[full['stamp'].notnull()] = parsedDate
 full['tod'].loc[full['stamp'].notnull()] = parsedToD
+full['numToD'].loc[full['stamp'].notnull()] = numToD
 full['dow'].loc[full['stamp'].notnull()] = parsedDoW
-full['weekday'] = full['dow'] > 4
+full['weekend'] = full['dow'] > 4
 
 # organize data type and order
 full = full.sort_values(['device_id', 'stamp'])
@@ -63,7 +70,10 @@ full.loc[full['stamp'].notnull() & full['fav'].isnull(),'fav'] = False
 
 # output csv
 full.to_csv('full.csv', index=False)
-print(full.head())
+
+# output notfull.csv: weekday data, drop problematic(csv-->arff) cols
+full[full['weekend']==False].drop(['route_list','stop_location','weekend'],1).to_csv('notfull.csv', index=False)
+
 
 '''==================='''
 ''' Sample Device IDs '''
@@ -83,4 +93,5 @@ row1 = input("End row")
 row2 = input("Start row")
 sample.exploreOneDayOneID(sample_id,row1,row2,sampleDate)
 '''
+
 
