@@ -13,8 +13,6 @@ with open('01_checkin_sorted.csv') as fin:
     for line in fin:
         splited = line.rstrip().split(',')
         date, device_id, stop_id = splited[1][:10], splited[0], splited[5]
-        if device_id == 'd2b635d3-465d-4c3a-8757-61807e046a9b':
-            print cnt, date, splited[1]
         if (pre_date and pre_stop_id and pre_device_id == device_id and date == pre_date and pre_stop_id == stop_id):
             cnt += 1
         else:
