@@ -44,6 +44,26 @@ xColumns = [
             ]
 yColumn = 'stop_index'
 
+stops = []
+with open('stops.txt') as fin:
+    for line in fin:
+        name, lat, lont = line.rstrip().split(',')
+        lat, lont = float(lat), float(lont)
+        if 40.43688 <= lat <= 40.443609 and -80.00585 <= lont <= -79.995292:
+            stops.append((name, lat, lont))
+print '%d stops in downtown' % len(stops)
+
+def nearest(lat, lont):
+    global stops
+    lat, lont = float(lat), float(lont)
+    return min(((latt - lat) ** 2 + (lontt - lont) ** 2, name) for name, latt, lontt in stops)[1]
+
+print 'calculating baseline'
+baseline_actual = df['stop_id']
+baseline_predict = df.apply(lambda r: nearest(r['current_lat'], r['current_lon']), axis = 1)
+baseline_correct = sum(1 if a == b else 0 for a, b in zip(baseline_actual, baseline_predict))
+print 'total %d, correct %d, incorrect %d, pencentage %f' % (len(baseline_actual), baseline_correct, len(baseline_actual) - baseline_correct, float(baseline_correct) / len(baseline_actual))
+
 for f in (
                 TreeWrapper,
                 LogiWrapper
