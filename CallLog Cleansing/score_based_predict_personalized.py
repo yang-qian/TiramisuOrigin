@@ -44,7 +44,7 @@ def get_largest_n(l, keys, num):
         return []
     return [x[0] for x in sorted(l, key=lambda t:make_reverse_tuple(t,keys))[:num]]
 
-fout = open('predice_devices.csv', 'w')
+fout = open('predict_devices.csv', 'w')
 print >> fout, 'device_id,total,train,test,global_nearest,global_route,global_popu,global_lost,per_radius,per_nearest,per_route,per_popu,per_lost,train_distances'
 pre = None
 total=train=test=cnt=global_nearest=global_route=global_popu=global_lost=per_nearest=per_route=per_popu=per_lost = 0
