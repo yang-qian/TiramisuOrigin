@@ -2,7 +2,7 @@ import math
 import pandas
 from sklearn.neighbors import BallTree
 
-RADIUS = 0.01
+RADIUS = 0.5
 LIST_SIZE = 5
 df = pandas.read_csv('log_distance_train.csv')
 

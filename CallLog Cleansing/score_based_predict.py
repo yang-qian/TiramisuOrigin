@@ -8,6 +8,8 @@ p = index.Property()
 p.dimension = 2
 idx = index.Index(properties=p)
 id_to_stop_id = {}
+# weekendlog_no_dup.csv with NAN filtered
+# sorted by device_id and timestamp
 df = pandas.read_csv('log_distance_train.csv')
 
 with open('stops_scores.txt') as fin:

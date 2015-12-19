@@ -3,7 +3,7 @@ import collections
 
 stop_popularity = collections.defaultdict(int)
 stops = {}
-df = pandas.read_csv('01_log.csv')
+df = pandas.read_csv('01_weekdaylog.csv')
 df = df[df.apply(lambda r: r['time'] != 'NAN', axis=1)] 
 df = df[df.apply(lambda r: r['agency_id'] != 'NAN', axis=1)] 
 

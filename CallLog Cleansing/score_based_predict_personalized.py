@@ -6,13 +6,14 @@ from sklearn.neighbors import BallTree
 #df = pandas.read_csv('log_distance_train.csv')
 #df = df.sort(['device_id', 'stamp'])
 #df.to_csv('log_distance_train.csv', index=False)
+
 TRAIN_PERCENTAGE = 0.6
-DISTANCE_FACTOR = 0.75
+DISTANCE_FACTOR = 0.75 # distance boundary = 3/4 pecentile of distance history
 RADIUS = 0.01
 LIST_SIZE = 5
-df = pandas.read_csv('log_distance_train.csv')
+df = pandas.read_csv('03_autofav_no_dup.csv') #log file, Chi:log_distance_train.csv
 
-test_devices = {}
+test_devices = {} # all the devices with more than 10 records
 with open('test_devices.csv') as fin:
     line = fin.readline()
     for line in fin:
@@ -44,7 +45,7 @@ def get_largest_n(l, keys, num):
         return []
     return [x[0] for x in sorted(l, key=lambda t:make_reverse_tuple(t,keys))[:num]]
 
-fout = open('predict_devices.csv', 'w')
+fout = open('prediction_result.csv', 'w') # prediction results
 print >> fout, 'device_id,total,train,test,global_nearest,global_route,global_popu,global_lost,per_radius,per_nearest,per_route,per_popu,per_lost,train_distances'
 pre = None
 total=train=test=cnt=global_nearest=global_route=global_popu=global_lost=per_nearest=per_route=per_popu=per_lost = 0
